@@ -214,40 +214,29 @@ const MyPlan = () => {
 
           {/* Sort */}
           <div className="flex items-center gap-3">
-
-            <span className="text-sm text-gray-500">
+            <span className="text-xs font-bold uppercase tracking-wider text-gray-500">
               Sort By
             </span>
 
             <div className="relative">
-
               <select
                 value={sortBy}
                 onChange={(e) =>
                   setSortBy(e.target.value as SortOption)
                 }
-                className="appearance-none rounded-xl border border-white/10 bg-[#15171d] py-2.5 pl-4 pr-10 text-sm font-semibold text-white outline-none focus:border-[#ccff00]"
+                aria-label="Sort workouts by"
+                className="appearance-none rounded-xl border border-white/10 bg-[#15171d] py-2.5 pl-4 pr-10 text-sm font-semibold text-white outline-none transition hover:border-white/20 focus:border-[#ccff00]"
               >
-                <option value="duration">
-                  Duration
-                </option>
-
-                <option value="calories">
-                  Calories
-                </option>
-
-                <option value="rating">
-                  Rating
-                </option>
+                <option value="duration">Duration</option>
+                <option value="calories">Calories</option>
+                <option value="rating">Rating</option>
               </select>
 
               <ChevronDown
                 size={16}
                 className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-gray-400"
               />
-
             </div>
-
           </div>
 
         </section>
