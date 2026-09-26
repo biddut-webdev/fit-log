@@ -1,3 +1,4 @@
+
 "use client";
 
 import { createContext, ReactNode, useEffect, useState } from "react";
@@ -24,7 +25,9 @@ interface IFitLogProviderProps {
 const FitLogProvider = ({ children }: IFitLogProviderProps) => {
   const [plan, setPlan] = useState<IFit[]>([]);
   const [saved, setSaved] = useState<IFit[]>([]);
+  const [hydrated, setHydrated] = useState(false);
 
+  // Load saved data from localStorage
   useEffect(() => {
     const storedPlan = localStorage.getItem("fitlog-plan");
     const storedSaved = localStorage.getItem("fitlog-saved");
@@ -36,15 +39,23 @@ const FitLogProvider = ({ children }: IFitLogProviderProps) => {
     if (storedSaved) {
       setSaved(JSON.parse(storedSaved));
     }
+
+    setHydrated(true);
   }, []);
 
+  // Save plan after localStorage data has been loaded
   useEffect(() => {
-    localStorage.setItem("fitlog-plan", JSON.stringify(plan));
-  }, [plan]);
+    if (!hydrated) return;
 
+    localStorage.setItem("fitlog-plan", JSON.stringify(plan));
+  }, [plan, hydrated]);
+
+  // Save saved workouts after localStorage data has been loaded
   useEffect(() => {
+    if (!hydrated) return;
+
     localStorage.setItem("fitlog-saved", JSON.stringify(saved));
-  }, [saved]);
+  }, [saved, hydrated]);
 
   const addToPlan = (fit: IFit) => {
     setPlan((prev) => [...prev, fit]);
@@ -79,3 +90,4 @@ const FitLogProvider = ({ children }: IFitLogProviderProps) => {
 };
 
 export default FitLogProvider;
+
