@@ -1,6 +1,6 @@
 # FitLog
 
-FitLog is a workout library website where users can explore workouts, see workout details, save workouts, and create a personal workout plan.
+FitLog is a workout website. Users can see different workouts, check workout details, save workouts, and make their own workout plan.
 
 ## Technologies Used
 
@@ -10,10 +10,14 @@ FitLog is a workout library website where users can explore workouts, see workou
 * Tailwind CSS
 * DaisyUI
 
-## Key Features
+## Features
 
-1. Users can browse different workouts.
-2. Users can view workout details.
-3. Users can add workouts to My Plan.
-4. Users can save workouts for later.
-5. Users can sort workouts by Duration, Calories, and Rating.
+* Users can see different workouts.
+* Users can view workout details.
+* Users can add workouts to My Plan.
+* Users can save workouts for later.
+* Users can remove workouts from My Plan.
+* Users can mark workouts as done.
+* Users can sort workouts by Duration, Calories, and Rating.
+* Data stays saved after page reload.
+* The website is responsive for mobile and desktop.
