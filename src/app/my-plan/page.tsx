@@ -23,7 +23,22 @@ const MyPlan = () => {
 
   const [activeTab, setActiveTab] = useState<"plan" | "saved">("plan");
   const [sortBy, setSortBy] = useState<SortOption>("duration");
-  const [completedIds, setCompletedIds] = useState<number[]>([]);
+  const [completedIds, setCompletedIds] = useState<number[]>(() => {
+    if (typeof window === "undefined") {
+      return [];
+    }
+
+    const storedCompleted = localStorage.getItem("fitlog-completed");
+
+    return storedCompleted ? JSON.parse(storedCompleted) : [];
+  });
+
+  useEffect(() => {
+    localStorage.setItem(
+      "fitlog-completed",
+      JSON.stringify(completedIds)
+    );
+  }, [completedIds]);
 
   // Loading state
   const [loading, setLoading] = useState(true);
