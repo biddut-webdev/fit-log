@@ -138,10 +138,16 @@ const WorkoutDetails = async ({ params }: IWorkoutDetailsProps) => {
               </ol>
             </div>
 
-            {/* CTA Buttons */}
-            <div className="mt-10 flex flex-col gap-4 sm:flex-row">
-              <AddToPlanButton fit={workout} />
-              <SaveButton fit={workout} />
+            {/* CTA Actions */}
+            <div className="mt-10">
+              <div className="flex flex-col gap-4 sm:flex-row">
+                <AddToPlanButton fit={workout} />
+                <SaveButton fit={workout} />
+              </div>
+
+              <p className="mt-3 text-xs leading-5 text-gray-500">
+                Add this workout to today&apos;s plan or save it for a later session.
+              </p>
             </div>
           </div>
         </div>
