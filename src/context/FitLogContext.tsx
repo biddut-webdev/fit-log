@@ -1,7 +1,11 @@
 
 "use client";
 
-import { createContext, ReactNode, useEffect, useState } from "react";
+import {
+  createContext,
+  ReactNode,
+  useSyncExternalStore,
+} from "react";
 
 import { IFit } from "@/types/workout";
 
@@ -22,55 +26,110 @@ interface IFitLogProviderProps {
   children: ReactNode;
 }
 
+const createStorageStore = (key: string) => {
+  let value = "[]";
+
+  const listeners = new Set<() => void>();
+
+  const getSnapshot = () => {
+    if (typeof window === "undefined") {
+      return "[]";
+    }
+
+    const currentValue = localStorage.getItem(key) ?? "[]";
+
+    if (currentValue !== value) {
+      value = currentValue;
+    }
+
+    return value;
+  };
+
+  const getServerSnapshot = () => "[]";
+
+  const subscribe = (listener: () => void) => {
+    listeners.add(listener);
+
+    const handleStorage = (event: StorageEvent) => {
+      if (event.key === key) {
+        value = event.newValue ?? "[]";
+        listener();
+      }
+    };
+
+    window.addEventListener("storage", handleStorage);
+
+    return () => {
+      listeners.delete(listener);
+      window.removeEventListener("storage", handleStorage);
+    };
+  };
+
+  const setValue = (newValue: string) => {
+    value = newValue;
+
+    localStorage.setItem(key, newValue);
+
+    listeners.forEach((listener) => listener());
+  };
+
+  return {
+    getSnapshot,
+    getServerSnapshot,
+    subscribe,
+    setValue,
+  };
+};
+
+const planStore = createStorageStore("fitlog-plan");
+const savedStore = createStorageStore("fitlog-saved");
+
 const FitLogProvider = ({ children }: IFitLogProviderProps) => {
-  const [plan, setPlan] = useState<IFit[]>([]);
-  const [saved, setSaved] = useState<IFit[]>([]);
-  const [hydrated, setHydrated] = useState(false);
+  const planJSON = useSyncExternalStore(
+    planStore.subscribe,
+    planStore.getSnapshot,
+    planStore.getServerSnapshot
+  );
 
-  // Load saved data from localStorage
-  useEffect(() => {
-    const storedPlan = localStorage.getItem("fitlog-plan");
-    const storedSaved = localStorage.getItem("fitlog-saved");
+  const savedJSON = useSyncExternalStore(
+    savedStore.subscribe,
+    savedStore.getSnapshot,
+    savedStore.getServerSnapshot
+  );
 
-    if (storedPlan) {
-      setPlan(JSON.parse(storedPlan));
-    }
-
-    if (storedSaved) {
-      setSaved(JSON.parse(storedSaved));
-    }
-
-    setHydrated(true);
-  }, []);
-
-  // Save plan after localStorage data has been loaded
-  useEffect(() => {
-    if (!hydrated) return;
-
-    localStorage.setItem("fitlog-plan", JSON.stringify(plan));
-  }, [plan, hydrated]);
-
-  // Save saved workouts after localStorage data has been loaded
-  useEffect(() => {
-    if (!hydrated) return;
-
-    localStorage.setItem("fitlog-saved", JSON.stringify(saved));
-  }, [saved, hydrated]);
+  const plan: IFit[] = JSON.parse(planJSON);
+  const saved: IFit[] = JSON.parse(savedJSON);
 
   const addToPlan = (fit: IFit) => {
-    setPlan((prev) => [...prev, fit]);
+    if (plan.some((item) => item.id === fit.id)) {
+      return;
+    }
+
+    if (plan.length >= 5) {
+      return;
+    }
+
+    planStore.setValue(JSON.stringify([...plan, fit]));
   };
 
   const saveForLater = (fit: IFit) => {
-    setSaved((prev) => [...prev, fit]);
+    if (saved.some((item) => item.id === fit.id)) {
+      return;
+    }
+
+    savedStore.setValue(JSON.stringify([...saved, fit]));
   };
 
   const removeFromPlan = (id: number) => {
-    setPlan((prev) => prev.filter((fit) => fit.id !== id));
+    const updatedPlan = plan.filter((fit) => fit.id !== id);
+
+    planStore.setValue(JSON.stringify(updatedPlan));
   };
 
   const removeFromSaved = (id: number) => {
-    setSaved((prev) => prev.filter((fit) => fit.id !== id));
+    const updatedSaved = saved.filter((fit) => fit.id !== id);
+
+    savedStore.setValue(JSON.stringify(updatedSaved));
   };
 
   return (
