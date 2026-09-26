@@ -1,6 +1,7 @@
 "use client";
 
-import { createContext, ReactNode, useState } from "react";
+import { createContext, ReactNode, useEffect, useState } from "react";
+
 import { IFit } from "@/types/workout";
 
 interface IFitLogContext {
@@ -23,6 +24,27 @@ interface IFitLogProviderProps {
 const FitLogProvider = ({ children }: IFitLogProviderProps) => {
   const [plan, setPlan] = useState<IFit[]>([]);
   const [saved, setSaved] = useState<IFit[]>([]);
+
+  useEffect(() => {
+    const storedPlan = localStorage.getItem("fitlog-plan");
+    const storedSaved = localStorage.getItem("fitlog-saved");
+
+    if (storedPlan) {
+      setPlan(JSON.parse(storedPlan));
+    }
+
+    if (storedSaved) {
+      setSaved(JSON.parse(storedSaved));
+    }
+  }, []);
+
+  useEffect(() => {
+    localStorage.setItem("fitlog-plan", JSON.stringify(plan));
+  }, [plan]);
+
+  useEffect(() => {
+    localStorage.setItem("fitlog-saved", JSON.stringify(saved));
+  }, [saved]);
 
   const addToPlan = (fit: IFit) => {
     setPlan((prev) => [...prev, fit]);
