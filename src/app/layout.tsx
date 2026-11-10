@@ -1,10 +1,13 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
+<<<<<<< HEAD
 import Navbar from "@/components/Navbar";
 import FitLogProvider from "@/context/FitLogContext";
 import { Toaster } from "react-hot-toast";
 import Footer from "@/components/Footer";
+=======
+>>>>>>> ca79f5f (Initial commit from Create Next App)
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -27,6 +30,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       lang="en"
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
+<<<<<<< HEAD
 
       <body className="min-h-full flex flex-col bg-[#15171D] text-white">
         <FitLogProvider>
@@ -36,6 +40,9 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
           <Toaster position="top-right" />
         </FitLogProvider>
       </body>
+=======
+      <body className="min-h-full flex flex-col">{children}</body>
+>>>>>>> ca79f5f (Initial commit from Create Next App)
     </html>
   );
 }
