@@ -1,9 +1,5 @@
 {
-<<<<<<< HEAD
   "name": "fit-log",
-=======
-  "name": "my-fit-log",
->>>>>>> ca79f5f (Initial commit from Create Next App)
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -13,7 +9,6 @@
     "lint": "eslint"
   },
   "dependencies": {
-<<<<<<< HEAD
     "lucide-react": "^1.48.0",
     "next": "16.3.6",
     "react": "19.2.8",
@@ -29,20 +24,6 @@
     "eslint": "^9",
     "eslint-config-next": "16.3.6",
     "tailwindcss": "^4.3.3",
-=======
-    "next": "16.3.6",
-    "react": "19.2.8",
-    "react-dom": "19.2.8"
-  },
-  "devDependencies": {
-    "@tailwindcss/postcss": "^4",
-    "@types/node": "^20",
-    "@types/react": "^19",
-    "@types/react-dom": "^19",
-    "eslint": "^9",
-    "eslint-config-next": "16.3.6",
-    "tailwindcss": "^4",
->>>>>>> ca79f5f (Initial commit from Create Next App)
     "typescript": "^5"
   }
 }
